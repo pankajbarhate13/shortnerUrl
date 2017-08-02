@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @short_url.title %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @short_url.url %>
+</p>
+
+<p>
+  <strong>Short Url:</strong>
+  <%= @short_url.short_url %>
+</p>
+
+<p>
+  <strong>Jmp Url:</strong>
+  <%= @short_url.jmp_url %>
+</p>
+
+<%= link_to 'Edit', edit_short_url_path(@short_url), class: 'btn btn-primary' %>  
+<%= link_to 'Home', short_urls_path, class: 'btn btn-primary' %>

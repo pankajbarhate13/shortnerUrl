@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-md-6">
+      <%= form_for(@short_url) do |f| %>
+        <% if @short_url.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@short_url.errors.count, "error") %> prohibited this short_url from being saved:</h2>
+
+            <ul>
+            <% @short_url.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.label :title %><br>
+          <%= f.text_field :title, class: 'form-control', placeholder: " Title", required: :required %>
+        </div>
+        <div class="form-group">
+          <%= f.label :url %><br>
+          <%= f.text_field :url, class: 'form-control', placeholder: " Url", required: :required %>
+        </div>
+
+        
+        <div class="actions">
+          <%= f.submit  class: 'btn btn-primary'%>
+        </div>
+      <% end %>
+  </div>
+</div>
