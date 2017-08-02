@@ -49,5 +49,4 @@ test:
 production:
   <<: *default
   database: shortnerUrl_production
-  username: shortnerUrl
-  password: <%= ENV['SHORTNERURL_DATABASE_PASSWORD'] %>
+  
