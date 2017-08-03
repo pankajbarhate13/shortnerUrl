@@ -45,6 +45,8 @@ GEM
       httparty (>= 0.7.6)
       multi_json (~> 1.3)
       oauth2 (>= 0.5.0, < 2.0)
+    bootstrap-will_paginate (0.0.10)
+      will_paginate
     builder (3.2.3)
     byebug (9.0.6)
     coffee-rails (4.1.1)
@@ -184,12 +186,14 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    will_paginate (3.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bitly
+  bootstrap-will_paginate
   byebug
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)

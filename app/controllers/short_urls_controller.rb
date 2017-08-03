@@ -10,7 +10,7 @@ class ShortUrlsController < ApplicationController
   # GET /short_urls
   # GET /short_urls.json
   def index
-    @short_urls = ShortUrl.all.order(clicks: :desc).limit(100)
+    @short_urls = ShortUrl.all.order(clicks: :desc).limit(100).paginate(:page => params[:page], :per_page => 10)
     @short_urls.each do |link|
       
       # Call bitly api go get no of clicks

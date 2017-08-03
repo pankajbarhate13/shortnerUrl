@@ -30,4 +30,7 @@
 
 <br>
 
-<%= link_to 'New Short url', new_short_url_path, class: 'btn btn-primary' %>
+<%= link_to 'New Short url', new_short_url_path, class: 'btn btn-primary' %><br>
+
+<!-- for pagination -->
+<%= will_paginate(@short_urls, :renderer => WillPaginate::ActionView::LinkRenderer) %>
