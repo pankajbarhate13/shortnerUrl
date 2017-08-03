@@ -1,10 +1,30 @@
 class ShortUrlsController < ApplicationController
   before_action :set_short_url, only: [:show, :edit, :update, :destroy]
 
+  # It is possible to open an http, https or ftp URL as though it were a file
+  require 'open-uri'
+
+  # To read json response
+  require 'json'
+
   # GET /short_urls
   # GET /short_urls.json
   def index
-    @short_urls = ShortUrl.all
+    @short_urls = ShortUrl.all.order(clicks: :desc).limit(100)
+    @short_urls.each do |link|
+      
+      # Call bitly api go get no of clicks
+      response = open("https://api-ssl.bitly.com/v3/link/clicks?access_token=#{ENV["API_KEY"]}&link=#{link.short_url}").read
+      
+      # For Parse Json response
+      res =  JSON.parse response
+
+      if res["status_code"] == 200
+        link.update_attributes(clicks: res["data"]["link_clicks"])
+      else 
+         flash[:notice] = 'Something went wrong'
+      end
+    end
   end
 
   # GET /short_urls/1

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Short Urls</h1>
 
 <table class="table table-striped">
@@ -9,6 +7,7 @@
       <th> Url</th>
       <th> Short Url</th>
       <th> Jmp Url</th>
+      <th> No of Clicks </th> 
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,9 +16,10 @@
     <% @short_urls.each do |short_url| %>
       <tr>
         <td><%= short_url.title %></td>
-        <td><%= link_to "#{short_url.url}" ,short_url.url , target: "_blank"%></td>
-        <td><%= link_to "#{short_url.short_url}" ,short_url.short_url, target: "_blank" %></td>
-        <td><%= link_to "#{short_url.jmp_url}" ,short_url.jmp_url, target: "_blank" %></td>
+        <td><%= link_to "#{short_url.url}" , root_url, target: "_blank"%></td>
+        <td><%= link_to "#{short_url.short_url}" , root_url, target: "_blank" %></td>
+        <td><%= link_to "#{short_url.jmp_url}" , root_url, target: "_blank" %></td>
+        <td><%= short_url.clicks %></td>
         <td><%= link_to 'Show', short_url  %></td>
         <td><%= link_to 'Edit', edit_short_url_path(short_url) %></td>
         <td><%= link_to 'Destroy', short_url, method: :delete, data: { confirm: 'Are you sure?' } %></td>
