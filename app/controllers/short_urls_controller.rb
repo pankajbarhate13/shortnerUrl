@@ -42,7 +42,7 @@ class ShortUrlsController < ApplicationController
       surl = Digest::MD5.hexdigest(url+"in salt we trust").slice(0..6) 
       short_url = "http://" + surl
 
-      @short_url = ShortUrl.create(title: params[:short_url][:title], url: params[:short_url][:url] , short_url: short_url, jmp_url: "")
+      @short_url = ShortUrl.create(title: params[:short_url][:title], url: params[:short_url][:url] , short_url: short_url, jmp_url: "", clicks: 0)
       redirect_to @short_url, notice: 'Short url was successfully created.'
     else 
       redirect_to short_urls_path, notice: 'Invalid Url.'
