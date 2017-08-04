@@ -7,24 +7,13 @@ class ShortUrlsController < ApplicationController
   # To read json response
   require 'json'
 
+  # require 'securerandom'
+
+
   # GET /short_urls
   # GET /short_urls.json
   def index
     @short_urls = ShortUrl.all.order(clicks: :desc).limit(100).paginate(:page => params[:page], :per_page => 10)
-    @short_urls.each do |link|
-      
-      # Call bitly api go get no of clicks
-      response = open("https://api-ssl.bitly.com/v3/link/clicks?access_token=#{ENV["API_KEY"]}&link=#{link.short_url}").read
-      
-      # For Parse Json response
-      res =  JSON.parse response
-
-      if res["status_code"] == 200
-        link.update_attributes(clicks: res["data"]["link_clicks"])
-      else 
-         flash[:notice] = 'Something went wrong'
-      end
-    end
   end
 
   # GET /short_urls/1
@@ -44,28 +33,22 @@ class ShortUrlsController < ApplicationController
   # POST /short_urls
   # POST /short_urls.json
   def create
-    @short_url = ShortUrl.new(short_url_params)
+    url = params[:short_url][:url]
 
-    if params and params[:short_url][:url].present?
-      url = Bitly.client.shorten(params[:short_url][:url])
-      long_url = url.long_url 
-      short_url = url.short_url 
-      jmp_url = url.jmp_url
+    # regex to validate url
+    is_url = url.match(/^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix).present?
+    
+    if is_url == true
+      surl = Digest::MD5.hexdigest(url+"in salt we trust").slice(0..6) 
+      short_url = "http://" + surl
 
-      @short_url = ShortUrl.create(title: params[:short_url][:title], url: long_url , short_url: short_url, jmp_url: jmp_url)
-
+      @short_url = ShortUrl.create(title: params[:short_url][:title], url: params[:short_url][:url] , short_url: short_url, jmp_url: "")
       redirect_to @short_url, notice: 'Short url was successfully created.'
+    else 
+      redirect_to short_urls_path, notice: 'Invalid Url.'
+    end  
 
-      # respond_to do |format|
-      #   if @short_url.save
-      #     format.html { redirect_to @short_url, notice: 'Short url was successfully created.' }
-      #     format.json { render :show, status: :created, location: @short_url }
-      #   else
-      #     format.html { render :new }
-      #     format.json { render json: @short_url.errors, status: :unprocessable_entity }
-      #   end
-      # end
-    end
+    
   end
 
   # PATCH/PUT /short_urls/1
@@ -92,6 +75,19 @@ class ShortUrlsController < ApplicationController
     end
   end
 
+  def update_clicks
+    url = ShortUrl.find(params[:id])
+    if url.clicks == nil
+      count = 1
+      url.update_attributes(clicks: count)
+    else 
+      count = url.clicks + 1
+      url.update_attributes(clicks: count)
+    end
+    render json: {clicks: count }
+    # render nothing: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_short_url
@@ -103,3 +99,4 @@ class ShortUrlsController < ApplicationController
       params.require(:short_url).permit(:title, :url, :short_url, :jmp_url)
     end
 end
+
